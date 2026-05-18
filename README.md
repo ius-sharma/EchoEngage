@@ -112,10 +112,10 @@ Visit **http://localhost:5173** → Click "Seed Memories" → Select a comment �
 
 ## 🔑 API Keys
 
-| Service | Get Key | Free Tier |
-|---------|---------|-----------|
-| **Groq** | [groq.com](https://groq.com) | Free tier available |
-| **Hindsight** | [hindsight.vectorize.io](https://hindsight.vectorize.io) | Use promo `MEMHACK515` for $50 free |
+| Service | Get Key |
+|---------|---------|
+| **Groq** | [groq.com](https://groq.com) | 
+| **Hindsight** | [hindsight.vectorize.io](https://hindsight.vectorize.io) | 
 
 ---
 
