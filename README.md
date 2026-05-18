@@ -1,6 +1,6 @@
 # EchoEngage — Creator Relationship Memory Agent
 
-> **Hackathon Project** | Built with LangGraph · Hindsight · CascadeFlow
+| Built with LangGraph · Hindsight · CascadeFlow
 
 EchoEngage helps creators **remember every follower**, prioritize relationships, and reply personally — so no loyal fan ever feels like a stranger.
 
