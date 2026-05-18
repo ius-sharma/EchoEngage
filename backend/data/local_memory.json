@@ -1,0 +1,663 @@
+{
+  "echoeng-follower_riya": [
+    {
+      "content": "Riya Sharma likes AI productivity tools and automation content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094464"
+    },
+    {
+      "content": "Riya asked about automating content research for solo creators.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094486"
+    },
+    {
+      "content": "Riya loved the AI tools carousel, especially the Notion AI section.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094494"
+    },
+    {
+      "content": "Riya is building a content creation workflow for her personal brand.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094499"
+    },
+    {
+      "content": "Riya responds positively to practical, tool-specific recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094505"
+    },
+    {
+      "content": "Riya has been consistently engaged over 9 interactions with positive sentiment.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094511"
+    },
+    {
+      "content": "Riya is interested in solo creator workflows and content automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094516"
+    },
+    {
+      "content": "Riya previously asked about tools for topic discovery and research.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094521"
+    },
+    {
+      "content": "Riya was recommended Perplexity for research and Feedly for topic discovery.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.094526"
+    },
+    {
+      "content": "Riya Sharma commented: \"Any tool recommendations for my content creation workflow? I've been struggling with automating my s\" on AI Tools Carousel Post. Intent: appreciation. Sentiment: neutral.",
+      "context": "comment interaction",
+      "timestamp": "2026-05-18T21:07:46.132540"
+    },
+    {
+      "content": "Riya Sharma likes AI productivity tools and automation content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.499454"
+    },
+    {
+      "content": "Riya asked about automating content research for solo creators.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502225"
+    },
+    {
+      "content": "Riya loved the AI tools carousel, especially the Notion AI section.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502238"
+    },
+    {
+      "content": "Riya is building a content creation workflow for her personal brand.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502243"
+    },
+    {
+      "content": "Riya responds positively to practical, tool-specific recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502249"
+    },
+    {
+      "content": "Riya has been consistently engaged over 9 interactions with positive sentiment.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502254"
+    },
+    {
+      "content": "Riya is interested in solo creator workflows and content automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502259"
+    },
+    {
+      "content": "Riya previously asked about tools for topic discovery and research.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502265"
+    },
+    {
+      "content": "Riya was recommended Perplexity for research and Feedly for topic discovery.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.502270"
+    },
+    {
+      "content": "Riya Sharma likes AI productivity tools and automation content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541858"
+    },
+    {
+      "content": "Riya asked about automating content research for solo creators.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541878"
+    },
+    {
+      "content": "Riya loved the AI tools carousel, especially the Notion AI section.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541883"
+    },
+    {
+      "content": "Riya is building a content creation workflow for her personal brand.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541888"
+    },
+    {
+      "content": "Riya responds positively to practical, tool-specific recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541893"
+    },
+    {
+      "content": "Riya has been consistently engaged over 9 interactions with positive sentiment.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541898"
+    },
+    {
+      "content": "Riya is interested in solo creator workflows and content automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541903"
+    },
+    {
+      "content": "Riya previously asked about tools for topic discovery and research.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541909"
+    },
+    {
+      "content": "Riya was recommended Perplexity for research and Feedly for topic discovery.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.541914"
+    },
+    {
+      "content": "Riya Sharma likes AI productivity tools and automation content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054851"
+    },
+    {
+      "content": "Riya asked about automating content research for solo creators.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054866"
+    },
+    {
+      "content": "Riya loved the AI tools carousel, especially the Notion AI section.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054869"
+    },
+    {
+      "content": "Riya is building a content creation workflow for her personal brand.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054872"
+    },
+    {
+      "content": "Riya responds positively to practical, tool-specific recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054875"
+    },
+    {
+      "content": "Riya has been consistently engaged over 9 interactions with positive sentiment.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054878"
+    },
+    {
+      "content": "Riya is interested in solo creator workflows and content automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054881"
+    },
+    {
+      "content": "Riya previously asked about tools for topic discovery and research.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054884"
+    },
+    {
+      "content": "Riya was recommended Perplexity for research and Feedly for topic discovery.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.054887"
+    }
+  ],
+  "echoeng-follower_karan": [
+    {
+      "content": "Karan Mehta runs a SaaS startup and is interested in AI agents for business.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.132000"
+    },
+    {
+      "content": "Karan has a technical background and understands AI concepts.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.132032"
+    },
+    {
+      "content": "Karan mentioned having budget for AI tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.132046"
+    },
+    {
+      "content": "Karan is looking for AI solutions for customer onboarding and support.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.132059"
+    },
+    {
+      "content": "Karan Mehta runs a SaaS startup and is interested in AI agents for business.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.512945"
+    },
+    {
+      "content": "Karan has a technical background and understands AI concepts.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.512968"
+    },
+    {
+      "content": "Karan mentioned having budget for AI tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.512979"
+    },
+    {
+      "content": "Karan is looking for AI solutions for customer onboarding and support.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.512989"
+    },
+    {
+      "content": "Karan Mehta runs a SaaS startup and is interested in AI agents for business.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.547843"
+    },
+    {
+      "content": "Karan has a technical background and understands AI concepts.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.547858"
+    },
+    {
+      "content": "Karan mentioned having budget for AI tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.547864"
+    },
+    {
+      "content": "Karan is looking for AI solutions for customer onboarding and support.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.547869"
+    },
+    {
+      "content": "Karan Mehta commented: \"Can you explain how AI agents could help my SaaS startup? We're spending too much time on customer o\" on AI Agents for Business Post. Intent: appreciation. Sentiment: neutral.",
+      "context": "comment interaction",
+      "timestamp": "2026-05-18T21:42:42.153905"
+    },
+    {
+      "content": "Karan Mehta runs a SaaS startup and is interested in AI agents for business.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.067738"
+    },
+    {
+      "content": "Karan has a technical background and understands AI concepts.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.067758"
+    },
+    {
+      "content": "Karan mentioned having budget for AI tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.067768"
+    },
+    {
+      "content": "Karan is looking for AI solutions for customer onboarding and support.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.067783"
+    }
+  ],
+  "echoeng-follower_neha": [
+    {
+      "content": "Neha Verma was very active 2 months ago engaging with design tool content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.135379"
+    },
+    {
+      "content": "Neha liked Canva and content creation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.135396"
+    },
+    {
+      "content": "Neha stopped engaging after a product recommendation post.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.135401"
+    },
+    {
+      "content": "Neha has been inactive for over 40 days - considered a ghost follower.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.135407"
+    },
+    {
+      "content": "Neha Verma was very active 2 months ago engaging with design tool content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.517320"
+    },
+    {
+      "content": "Neha liked Canva and content creation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.517334"
+    },
+    {
+      "content": "Neha stopped engaging after a product recommendation post.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.517341"
+    },
+    {
+      "content": "Neha has been inactive for over 40 days - considered a ghost follower.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.517348"
+    },
+    {
+      "content": "Neha Verma was very active 2 months ago engaging with design tool content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.552379"
+    },
+    {
+      "content": "Neha liked Canva and content creation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.552400"
+    },
+    {
+      "content": "Neha stopped engaging after a product recommendation post.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.552410"
+    },
+    {
+      "content": "Neha has been inactive for over 40 days - considered a ghost follower.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.552423"
+    },
+    {
+      "content": "Neha Verma was very active 2 months ago engaging with design tool content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.075363"
+    },
+    {
+      "content": "Neha liked Canva and content creation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.075385"
+    },
+    {
+      "content": "Neha stopped engaging after a product recommendation post.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.075393"
+    },
+    {
+      "content": "Neha has been inactive for over 40 days - considered a ghost follower.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.075401"
+    }
+  ],
+  "echoeng-follower_priya": [
+    {
+      "content": "Priya Nair asked about Zapier vs Make.com for e-commerce automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.138253"
+    },
+    {
+      "content": "Priya is interested in no-code automation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.138273"
+    },
+    {
+      "content": "Priya is building a small e-commerce workflow.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.138282"
+    },
+    {
+      "content": "Priya has asked about Zapier vs Make.com comparison before - this is a repeated question.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.138292"
+    },
+    {
+      "content": "Priya Nair asked about Zapier vs Make.com for e-commerce automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.527426"
+    },
+    {
+      "content": "Priya is interested in no-code automation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.527441"
+    },
+    {
+      "content": "Priya is building a small e-commerce workflow.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.527447"
+    },
+    {
+      "content": "Priya has asked about Zapier vs Make.com comparison before - this is a repeated question.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.527453"
+    },
+    {
+      "content": "Priya Nair asked about Zapier vs Make.com for e-commerce automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.556698"
+    },
+    {
+      "content": "Priya is interested in no-code automation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.556710"
+    },
+    {
+      "content": "Priya is building a small e-commerce workflow.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.556715"
+    },
+    {
+      "content": "Priya has asked about Zapier vs Make.com comparison before - this is a repeated question.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.556719"
+    },
+    {
+      "content": "Priya Nair commented: \"Hey, I'm still confused about Zapier vs Make.com. Which one should I pick for my e-commerce store? I\" on No-Code Automation Guide. Intent: appreciation. Sentiment: neutral.",
+      "context": "comment interaction",
+      "timestamp": "2026-05-18T21:44:16.326472"
+    },
+    {
+      "content": "Priya Nair asked about Zapier vs Make.com for e-commerce automation.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.082558"
+    },
+    {
+      "content": "Priya is interested in no-code automation tools.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.082577"
+    },
+    {
+      "content": "Priya is building a small e-commerce workflow.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.082586"
+    },
+    {
+      "content": "Priya has asked about Zapier vs Make.com comparison before - this is a repeated question.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.082595"
+    }
+  ],
+  "echoeng-follower_arjun": [
+    {
+      "content": "Arjun Patel is a software developer interested in AI agent frameworks.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.141861"
+    },
+    {
+      "content": "Arjun uses LangChain and Python for AI development.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.141922"
+    },
+    {
+      "content": "Arjun provides technical feedback on posts and engages deeply with content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.141932"
+    },
+    {
+      "content": "Arjun could be a potential collaborator on AI projects.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.141938"
+    },
+    {
+      "content": "Arjun Patel is a software developer interested in AI agent frameworks.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.532626"
+    },
+    {
+      "content": "Arjun uses LangChain and Python for AI development.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.532640"
+    },
+    {
+      "content": "Arjun provides technical feedback on posts and engages deeply with content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.532646"
+    },
+    {
+      "content": "Arjun could be a potential collaborator on AI projects.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.532652"
+    },
+    {
+      "content": "Arjun Patel is a software developer interested in AI agent frameworks.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.562037"
+    },
+    {
+      "content": "Arjun uses LangChain and Python for AI development.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.562062"
+    },
+    {
+      "content": "Arjun provides technical feedback on posts and engages deeply with content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.562067"
+    },
+    {
+      "content": "Arjun could be a potential collaborator on AI projects.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.562073"
+    },
+    {
+      "content": "Arjun Patel is a software developer interested in AI agent frameworks.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.090841"
+    },
+    {
+      "content": "Arjun uses LangChain and Python for AI development.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.090856"
+    },
+    {
+      "content": "Arjun provides technical feedback on posts and engages deeply with content.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.090861"
+    },
+    {
+      "content": "Arjun could be a potential collaborator on AI projects.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.090866"
+    }
+  ],
+  "echoeng-follower_meera": [
+    {
+      "content": "Meera Kapoor is a content writer looking for AI writing assistants.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.148730"
+    },
+    {
+      "content": "Meera asked about Jasper vs Claude for writing.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.148749"
+    },
+    {
+      "content": "Meera is interested in tools for blog posts and newsletters.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.148757"
+    },
+    {
+      "content": "Meera Kapoor is a content writer looking for AI writing assistants.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.537209"
+    },
+    {
+      "content": "Meera asked about Jasper vs Claude for writing.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.537227"
+    },
+    {
+      "content": "Meera is interested in tools for blog posts and newsletters.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.537233"
+    },
+    {
+      "content": "Meera Kapoor is a content writer looking for AI writing assistants.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.567397"
+    },
+    {
+      "content": "Meera asked about Jasper vs Claude for writing.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.567409"
+    },
+    {
+      "content": "Meera is interested in tools for blog posts and newsletters.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.567415"
+    },
+    {
+      "content": "Meera Kapoor is a content writer looking for AI writing assistants.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.095191"
+    },
+    {
+      "content": "Meera asked about Jasper vs Claude for writing.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.095206"
+    },
+    {
+      "content": "Meera is interested in tools for blog posts and newsletters.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.095211"
+    },
+    {
+      "content": "Meera Kapoor commented: \"Is Claude better than ChatGPT for long-form writing? I need something for blog posts and newsletters\" on AI Writing Tools Comparison. Intent: appreciation. Sentiment: neutral.",
+      "context": "comment interaction",
+      "timestamp": "2026-05-18T22:13:58.870645"
+    }
+  ],
+  "echoeng-follower_sara": [
+    {
+      "content": "Sara Khan is a founder of an early-stage startup with 5 people.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.158195"
+    },
+    {
+      "content": "Sara is looking for AI tools to reduce team workload.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.158215"
+    },
+    {
+      "content": "Sara mentioned she is willing to pay for personalized tool recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:07:02.158222"
+    },
+    {
+      "content": "Sara Khan is a founder of an early-stage startup with 5 people.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.541905"
+    },
+    {
+      "content": "Sara is looking for AI tools to reduce team workload.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.541917"
+    },
+    {
+      "content": "Sara mentioned she is willing to pay for personalized tool recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:28:26.541922"
+    },
+    {
+      "content": "Sara Khan is a founder of an early-stage startup with 5 people.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.572618"
+    },
+    {
+      "content": "Sara is looking for AI tools to reduce team workload.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.572631"
+    },
+    {
+      "content": "Sara mentioned she is willing to pay for personalized tool recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T21:30:48.572636"
+    },
+    {
+      "content": "Sara Khan is a founder of an early-stage startup with 5 people.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.100713"
+    },
+    {
+      "content": "Sara is looking for AI tools to reduce team workload.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.100747"
+    },
+    {
+      "content": "Sara mentioned she is willing to pay for personalized tool recommendations.",
+      "context": "seed data",
+      "timestamp": "2026-05-18T22:13:41.100753"
+    }
+  ],
+  "echoeng-follower_aman": [
+    {
+      "content": "Aman Singh commented: \"Just discovered your channel. Great content on AI tools!\" on AI Productivity Tools Video. Intent: appreciation. Sentiment: neutral.",
+      "context": "comment interaction",
+      "timestamp": "2026-05-18T21:43:12.551455"
+    }
+  ]
+}
