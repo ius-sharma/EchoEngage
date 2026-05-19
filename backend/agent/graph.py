@@ -1,6 +1,7 @@
 """
 EchoEngage - LangGraph Agent Graph
 The core 6-node pipeline: recall → classify → route → generate → quality_gate → retain
+Uses Groq exclusively for LLM inference.
 """
 
 import os
@@ -21,81 +22,25 @@ from data.synthetic_data import CREATOR_PROFILE, get_follower_by_id
 
 logger = logging.getLogger(__name__)
 
-# Track which provider is active so we don't retry Groq every call after it fails
-_active_provider = None  # "groq" or "gemini"
-
-# Gemini model mapping (Groq model -> Gemini equivalent)
-GEMINI_MODEL_MAP = {
-    "qwen/qwen3-32b": "gemini-2.5-flash",
-    "openai/gpt-oss-120b": "gemini-2.5-flash",
-    "llama-3.3-70b-versatile": "gemini-2.5-flash",
-}
-
 
 def _get_llm(model: str = "qwen/qwen3-32b", temperature: float = 0.7):
-    """Create an LLM instance. Tries Groq first, falls back to Google Gemini."""
-    global _active_provider
-
-    # If Gemini is already active (Groq failed before), use Gemini directly
-    if _active_provider == "gemini":
-        return _create_gemini_llm(model, temperature)
-
-    # Try Groq first
+    """Create a Groq LLM instance."""
     groq_key = os.getenv("GROQ_API_KEY", "")
-    if groq_key and groq_key != "your_groq_api_key_here":
-        try:
-            llm = ChatGroq(
-                model=model,
-                api_key=groq_key,
-                temperature=temperature,
-                max_tokens=1024
-            )
-            if _active_provider is None:
-                _active_provider = "groq"
-                logger.info(f"🟢 Using Groq provider with model: {model}")
-            return llm
-        except Exception as e:
-            logger.warning(f"⚠️ Groq initialization failed: {e}")
-
-    # Fallback to Google Gemini
-    return _create_gemini_llm(model, temperature)
-
-
-def _create_gemini_llm(model: str, temperature: float):
-    """Create a Google Gemini LLM instance as fallback."""
-    global _active_provider
-    google_key = os.getenv("GOOGLE_API_KEY", "")
-    if not google_key:
+    if not groq_key or groq_key == "your_groq_api_key_here":
         raise ValueError(
-            "Both GROQ_API_KEY and GOOGLE_API_KEY are invalid/missing. "
-            "Please add at least one valid key to your .env file.\n"
-            "  - Groq: https://console.groq.com/keys\n"
-            "  - Google Gemini (free): https://aistudio.google.com/apikey"
+            "GROQ_API_KEY is missing or invalid. "
+            "Please add a valid Groq API key to your backend/.env file.\n"
+            "  Get one free at: https://console.groq.com/keys"
         )
 
-    from langchain_google_genai import ChatGoogleGenerativeAI
-    gemini_model = GEMINI_MODEL_MAP.get(model, "gemini-2.5-flash")
-
-    if _active_provider != "gemini":
-        _active_provider = "gemini"
-        logger.info(f"🔄 Switched to Google Gemini provider (model: {gemini_model})")
-
-    return ChatGoogleGenerativeAI(
-        model=gemini_model,
-        google_api_key=google_key,
+    llm = ChatGroq(
+        model=model,
+        api_key=groq_key,
         temperature=temperature,
-        max_output_tokens=1024
+        max_tokens=1024
     )
-
-
-def _mark_groq_failed():
-    """Mark Groq as failed so subsequent calls use Gemini directly."""
-    global _active_provider
-    if _active_provider != "gemini":
-        google_key = os.getenv("GOOGLE_API_KEY", "")
-        if google_key:
-            _active_provider = "gemini"
-            logger.info("🔄 Groq API failed — switching all future calls to Google Gemini")
+    logger.info(f"🟢 Using Groq with model: {model}")
+    return llm
 
 
 def _parse_json(text: str) -> dict:
@@ -108,7 +53,6 @@ def _parse_json(text: str) -> dict:
     text = text.strip()
     
     # Remove markdown code blocks (handle various formats)
-    # Pattern: ```json ... ``` or ``` ... ```
     code_block_match = re.search(r'```(?:json)?\s*\n?(.*?)\n?\s*```', text, re.DOTALL)
     if code_block_match:
         text = code_block_match.group(1).strip()
@@ -225,37 +169,11 @@ async def classify_comment_node(state: AgentState) -> dict:
             confidence=result.get("confidence", 0.5)
         )
     except Exception as e:
-        error_msg = str(e)
-        # If Groq auth failed, switch to Gemini and retry
-        if "401" in error_msg or "invalid_api_key" in error_msg.lower() or "authentication" in error_msg.lower():
-            logger.warning(f"⚠️ Groq auth failed in classify, switching to Gemini...")
-            _mark_groq_failed()
-            try:
-                llm = _get_llm(model="qwen/qwen3-32b", temperature=0.3)
-                response = await llm.ainvoke([
-                    SystemMessage(content=SYSTEM_PROMPT),
-                    HumanMessage(content=prompt)
-                ])
-                result = _parse_json(response.content)
-                classification = CommentClassification(
-                    intent=result.get("intent", "appreciation"),
-                    complexity=result.get("complexity", "simple"),
-                    sentiment=result.get("sentiment", "neutral"),
-                    priority_label=result.get("priority_label", "Low Priority"),
-                    confidence=result.get("confidence", 0.5)
-                )
-            except Exception as e2:
-                logger.error(f"Classification error (Gemini fallback also failed): {e2}")
-                classification = CommentClassification(
-                    intent="appreciation", complexity="simple",
-                    sentiment="neutral", priority_label="Low Priority", confidence=0.3
-                )
-        else:
-            logger.error(f"Classification error: {e}")
-            classification = CommentClassification(
-                intent="appreciation", complexity="simple",
-                sentiment="neutral", priority_label="Low Priority", confidence=0.3
-            )
+        logger.error(f"Classification error: {e}")
+        classification = CommentClassification(
+            intent="appreciation", complexity="simple",
+            sentiment="neutral", priority_label="Low Priority", confidence=0.3
+        )
 
     logger.info(f"📋 Classified: {classification.get('intent')} | {classification.get('complexity')} | {classification.get('priority_label')}")
     return {"classification": classification}
@@ -274,12 +192,6 @@ async def route_model_node(state: AgentState) -> dict:
         intent=intent,
         has_memory=has_memory
     )
-
-    # If Gemini is active, update model name in routing decision
-    if _active_provider == "gemini":
-        original_model = decision["model"]
-        decision["model"] = GEMINI_MODEL_MAP.get(original_model, "gemini-2.5-flash")
-        decision["reason"] += f" [via Gemini fallback]"
 
     logger.info(f"🔀 Route decision: {decision['model']} | Savings: {decision['savings_percentage']}%")
     return {
@@ -331,35 +243,7 @@ async def generate_reply_node(state: AgentState) -> dict:
             "routing_decision": routing_decision
         }
     except Exception as e:
-        error_msg = str(e)
-        # If Groq auth failed, switch to Gemini and retry
-        if "401" in error_msg or "invalid_api_key" in error_msg.lower() or "authentication" in error_msg.lower():
-            logger.warning(f"⚠️ Groq auth failed in generate, switching to Gemini...")
-            _mark_groq_failed()
-            try:
-                llm = _get_llm(model=selected_model, temperature=0.7)
-                start_time = time.time()
-                response = await llm.ainvoke([
-                    SystemMessage(content=SYSTEM_PROMPT),
-                    HumanMessage(content=prompt)
-                ])
-                latency = (time.time() - start_time) * 1000
-                result = _parse_json(response.content)
-                routing_decision = state.get("routing_decision", {})
-                if routing_decision:
-                    routing_decision["latency_ms"] = round(latency, 2)
-                    routing_decision["model"] = f"gemini-2.5-flash (fallback)"
-                return {
-                    "suggested_reply": result.get("suggested_reply", "Thanks for your comment!"),
-                    "explanation": result.get("explanation", "Generated via Gemini fallback."),
-                    "memory_updates": result.get("memory_updates", []),
-                    "priority_label": classification.get("priority_label", "Low Priority"),
-                    "routing_decision": routing_decision
-                }
-            except Exception as e2:
-                logger.error(f"Reply generation failed on both Groq and Gemini: {e2}")
-        else:
-            logger.error(f"Reply generation error: {e}")
+        logger.error(f"Reply generation error: {e}")
         return {
             "suggested_reply": f"Thanks for reaching out, {state['follower_name']}! I appreciate your comment.",
             "explanation": f"Fallback reply due to generation error: {type(e).__name__}",
@@ -418,31 +302,7 @@ async def quality_gate_node(state: AgentState) -> dict:
             "routing_decision": routing_decision
         }
     except Exception as e:
-        error_msg = str(e)
-        if "401" in error_msg or "invalid_api_key" in error_msg.lower() or "authentication" in error_msg.lower():
-            logger.warning(f"⚠️ Groq auth failed in quality_gate, switching to Gemini...")
-            _mark_groq_failed()
-            try:
-                llm = _get_llm(model="qwen/qwen3-32b", temperature=0.2)
-                response = await llm.ainvoke([
-                    SystemMessage(content="You are a reply quality evaluator. Return JSON only."),
-                    HumanMessage(content=prompt)
-                ])
-                result = _parse_json(response.content)
-                passed = result.get("passed", True)
-                reason = result.get("reason", "Quality check passed.")
-                routing_decision = state.get("routing_decision", {})
-                if routing_decision:
-                    routing_decision["quality_gate_passed"] = passed
-                return {
-                    "quality_passed": passed,
-                    "quality_reason": reason,
-                    "routing_decision": routing_decision
-                }
-            except Exception as e2:
-                logger.error(f"Quality gate failed on both Groq and Gemini: {e2}")
-        else:
-            logger.error(f"Quality gate error: {e}")
+        logger.error(f"Quality gate error: {e}")
         return {
             "quality_passed": True,
             "quality_reason": "Quality gate skipped due to error."
