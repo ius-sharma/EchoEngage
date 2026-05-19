@@ -19,6 +19,10 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Pipeline animation state
+  const [pipelineSteps, setPipelineSteps] = useState({});
+  const [currentPipelineStep, setCurrentPipelineStep] = useState(null);
+
   // Load initial data
   useEffect(() => {
     loadData();
@@ -54,6 +58,8 @@ function App() {
   async function handleSelectComment(comment) {
     setSelectedComment(comment);
     setAgentResult(comment.agent_response || null);
+    setPipelineSteps({});
+    setCurrentPipelineStep(null);
 
     // Load follower data
     try {
@@ -68,15 +74,41 @@ function App() {
     if (!selectedComment || processing) return;
 
     setProcessing(true);
+    setPipelineSteps({});
+    setCurrentPipelineStep(null);
+
+    // Define pipeline order for "active" step tracking
+    const stepOrder = ['recall_memory', 'classify_comment', 'route_model', 'generate_reply', 'quality_gate', 'retain_memory'];
+    let nextStepIdx = 0;
+
+    // Set first step as active
+    setCurrentPipelineStep(stepOrder[0]);
+
     try {
-      const response = await api.processComment(selectedComment.id);
-      setAgentResult(response.result);
+      const result = await api.processCommentStream(selectedComment.id, (stepData) => {
+        // Mark this step as done
+        setPipelineSteps(prev => ({
+          ...prev,
+          [stepData.step]: { preview: stepData.preview || '' }
+        }));
+
+        // Find next pending step and set it as active
+        const doneIdx = stepOrder.indexOf(stepData.step);
+        if (doneIdx >= 0 && doneIdx + 1 < stepOrder.length) {
+          setCurrentPipelineStep(stepOrder[doneIdx + 1]);
+        } else {
+          setCurrentPipelineStep(null);
+        }
+      });
+
+      setAgentResult(result);
+      setCurrentPipelineStep(null);
 
       // Update comment in list
       setComments((prev) =>
         prev.map((c) =>
           c.id === selectedComment.id
-            ? { ...c, status: 'processed', agent_response: response.result }
+            ? { ...c, status: 'processed', agent_response: result }
             : c
         )
       );
@@ -91,17 +123,38 @@ function App() {
     } catch (err) {
       console.error('Process error:', err);
       setError(`Failed to process: ${err.message}`);
+
+      // Fallback: try non-streaming
+      try {
+        const response = await api.processComment(selectedComment.id);
+        setAgentResult(response.result);
+        setComments((prev) =>
+          prev.map((c) =>
+            c.id === selectedComment.id
+              ? { ...c, status: 'processed', agent_response: response.result }
+              : c
+          )
+        );
+        const analyticsRes = await api.getAnalytics();
+        setAnalytics(analyticsRes);
+      } catch (fallbackErr) {
+        console.error('Fallback process error:', fallbackErr);
+      }
     } finally {
       setProcessing(false);
     }
   }
 
-  async function handleApproveReply() {
+  async function handleApproveReply(editedText) {
     if (!selectedComment || !agentResult) return;
 
     try {
       await api.approveReply(selectedComment.id);
-      setAgentResult((prev) => ({ ...prev, approved: true }));
+      setAgentResult((prev) => ({
+        ...prev,
+        approved: true,
+        suggested_reply: editedText || prev.suggested_reply
+      }));
 
       // Update comment in list
       setComments((prev) =>
@@ -201,6 +254,8 @@ function App() {
               comment={selectedComment}
               result={agentResult}
               processing={processing}
+              pipelineSteps={pipelineSteps}
+              currentPipelineStep={currentPipelineStep}
               onProcess={handleProcessComment}
               onApprove={handleApproveReply}
               onRegenerate={handleRegenerateReply}

@@ -33,6 +33,37 @@ export const api = {
       body: JSON.stringify({ comment_id: commentId }),
     }),
 
+  // Process with SSE streaming (live pipeline animation)
+  processCommentStream: (commentId, onStep) => {
+    return new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${API_BASE}/process-stream/${commentId}`);
+      
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.step === 'complete') {
+            eventSource.close();
+            resolve(data.result);
+          } else if (data.step === 'error') {
+            eventSource.close();
+            reject(new Error(data.message || 'Processing failed'));
+          } else {
+            // Pipeline step update
+            onStep(data);
+          }
+        } catch (e) {
+          console.error('SSE parse error:', e);
+        }
+      };
+
+      eventSource.onerror = (err) => {
+        eventSource.close();
+        reject(new Error('Connection to pipeline lost'));
+      };
+    });
+  },
+
   // Approve a reply
   approveReply: (commentId) =>
     fetchJSON('/approve', {

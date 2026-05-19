@@ -3,8 +3,11 @@ EchoEngage - FastAPI Routes
 REST API endpoints for the frontend dashboard.
 """
 
+import json
+import asyncio
 import logging
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
 
@@ -178,6 +181,117 @@ async def process_comment(request: ProcessRequest):
     except Exception as e:
         logger.error(f"❌ Error processing comment: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Process Comment with SSE Streaming ───────────────────────────
+
+@router.get("/process-stream/{comment_id}")
+async def process_comment_stream(comment_id: str):
+    """
+    Process a comment with Server-Sent Events streaming.
+    Sends real-time step updates as the LangGraph pipeline executes.
+    """
+    # Find the comment
+    comment = None
+    for c in COMMENTS:
+        if c["id"] == comment_id:
+            comment = c
+            break
+
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    follower = get_follower_by_id(comment["follower_id"])
+    if not follower:
+        raise HTTPException(status_code=404, detail="Follower not found")
+
+    async def event_stream():
+        """Generate SSE events for each pipeline step."""
+        initial_state = {
+            "messages": [],
+            "comment_id": comment["id"],
+            "comment_text": comment["message"],
+            "follower_id": comment["follower_id"],
+            "follower_name": comment["follower_name"],
+            "platform": comment["platform"],
+            "post_context": comment.get("post_context", "general post"),
+            "memory_context": None,
+            "classification": None,
+            "routing_decision": None,
+            "selected_model": None,
+            "suggested_reply": None,
+            "explanation": None,
+            "memory_updates": None,
+            "priority_label": None,
+            "quality_passed": None,
+            "quality_reason": None,
+            "escalation_count": 0
+        }
+
+        try:
+            graph = get_agent_graph()
+
+            # Stream each node step
+            async for event in graph.astream(initial_state, stream_mode="updates"):
+                for node_name, node_output in event.items():
+                    step_data = {"step": node_name, "status": "done"}
+
+                    # Add relevant preview data for each step
+                    if node_name == "recall_memory":
+                        mem = node_output.get("memory_context", "")
+                        mem_str = mem if isinstance(mem, str) else str(mem)
+                        step_data["preview"] = f"Found {len(mem_str)} chars of memory" if mem_str and mem_str != "No previous memories found for this follower." else "No prior memories"
+                    elif node_name == "classify_comment":
+                        cls = node_output.get("classification", {})
+                        step_data["preview"] = f"Intent: {cls.get('intent', '?')} | {cls.get('complexity', '?')}"
+                    elif node_name == "route_model":
+                        rd = node_output.get("routing_decision", {})
+                        step_data["preview"] = f"{rd.get('model', '?')} — saves {rd.get('savings_percentage', 0)}%"
+                    elif node_name == "generate_reply":
+                        reply = node_output.get("suggested_reply", "")
+                        step_data["preview"] = f"{reply[:60]}..." if len(reply) > 60 else reply
+                    elif node_name == "quality_gate":
+                        step_data["preview"] = "Passed ✓" if node_output.get("quality_passed", True) else "Failed — escalating"
+                    elif node_name == "retain_memory":
+                        step_data["preview"] = "Memories saved to Hindsight"
+
+                    yield f"data: {json.dumps(step_data)}\n\n"
+
+            # Get final state by running again (we already have it from stream)
+            # Actually reconstruct from the streamed updates
+            final_state = await graph.ainvoke(initial_state)
+
+            result = {
+                "comment_id": comment["id"],
+                "follower_id": comment["follower_id"],
+                "follower_name": comment["follower_name"],
+                "suggested_reply": final_state.get("suggested_reply", ""),
+                "priority_label": final_state.get("priority_label", "Low Priority"),
+                "explanation": final_state.get("explanation", ""),
+                "memory_updates": final_state.get("memory_updates", []),
+                "memory_context": final_state.get("memory_context", ""),
+                "classification": final_state.get("classification", {}),
+                "routing_decision": final_state.get("routing_decision", {}),
+                "quality_passed": final_state.get("quality_passed", True),
+                "quality_reason": final_state.get("quality_reason", "")
+            }
+
+            processed_comments[comment_id] = result
+            yield f"data: {json.dumps({'step': 'complete', 'status': 'done', 'result': result})}\n\n"
+
+        except Exception as e:
+            logger.error(f"❌ SSE stream error: {e}")
+            yield f"data: {json.dumps({'step': 'error', 'status': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+    )
 
 
 # ─── Approve Reply ─────────────────────────────────────────────────

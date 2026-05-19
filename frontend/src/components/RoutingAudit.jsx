@@ -1,7 +1,7 @@
 /**
- * RoutingAudit - CascadeFlow routing decision panel with cost tracking
+ * RoutingAudit - CascadeFlow routing decision panel with cost curve visualization
  */
-import { GitBranch, BarChart3, AlertCircle } from 'lucide-react';
+import { GitBranch, BarChart3, AlertCircle, TrendingDown, DollarSign, Zap } from 'lucide-react';
 
 export default function RoutingAudit({ decision, analytics }) {
   if (!decision && !analytics) {
@@ -23,6 +23,12 @@ export default function RoutingAudit({ decision, analytics }) {
     );
   }
 
+  // Calculate cost curve values
+  const baselineCost = analytics?.baseline_cost || decision?.baseline_cost || 0;
+  const actualCost = analytics?.total_cost || decision?.estimated_cost || 0;
+  const savings = baselineCost - actualCost;
+  const savingsPct = baselineCost > 0 ? ((savings / baselineCost) * 100) : 0;
+
   return (
     <div className="content-card routing-card">
       <div className="content-card-header">
@@ -33,6 +39,43 @@ export default function RoutingAudit({ decision, analytics }) {
         </h3>
       </div>
       <div className="routing-body">
+
+        {/* ── Cost Curve — Before vs After ────── */}
+        {(baselineCost > 0 || actualCost > 0) && (
+          <div className="cost-curve-box">
+            <div className="cost-curve-header">
+              <TrendingDown size={14} />
+              <span>Cost Curve — Before vs After</span>
+            </div>
+            <div className="cost-curve-bars">
+              <div className="cost-bar-row">
+                <span className="cost-bar-label">Without CascadeFlow</span>
+                <div className="cost-bar-track">
+                  <div className="cost-bar-fill baseline" style={{ width: '100%' }} />
+                </div>
+                <span className="cost-bar-value baseline">${baselineCost.toFixed(4)}</span>
+              </div>
+              <div className="cost-bar-row">
+                <span className="cost-bar-label">With CascadeFlow</span>
+                <div className="cost-bar-track">
+                  <div
+                    className="cost-bar-fill optimized"
+                    style={{ width: `${baselineCost > 0 ? Math.max(5, (actualCost / baselineCost) * 100) : 50}%` }}
+                  />
+                </div>
+                <span className="cost-bar-value optimized">${actualCost.toFixed(4)}</span>
+              </div>
+            </div>
+            {savingsPct > 0 && (
+              <div className="cost-savings-badge">
+                <DollarSign size={13} />
+                <span>{savingsPct.toFixed(1)}% cost reduction</span>
+                <span className="savings-amount">— saved ${savings.toFixed(4)}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Current Decision */}
         {decision && (
           <div className="routing-decision">
@@ -103,8 +146,12 @@ export default function RoutingAudit({ decision, analytics }) {
                 <span className="routing-stat-value white">${analytics.total_cost?.toFixed(4) || '0.0000'}</span>
               </div>
               <div className="routing-stat-row">
+                <span className="routing-stat-label">Baseline (no routing)</span>
+                <span className="routing-stat-value" style={{ color: '#f87171' }}>${analytics.baseline_cost?.toFixed(4) || '0.0000'}</span>
+              </div>
+              <div className="routing-stat-row">
                 <span className="routing-stat-label">Estimated savings</span>
-                <span className="routing-stat-value green">${analytics.cost_saved?.toFixed(4) || '0.0000'}</span>
+                <span className="routing-stat-value green">${(analytics.savings || 0).toFixed(4)}</span>
               </div>
 
               {/* Escalations */}
