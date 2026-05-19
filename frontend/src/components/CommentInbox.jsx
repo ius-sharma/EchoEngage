@@ -2,6 +2,7 @@
  * CommentInbox - Left sidebar with comment list
  */
 import { useState } from 'react';
+import { Camera, Play, Briefcase, MessageCircle, CheckCircle, Zap, Clock, Flame, Inbox as InboxIcon } from 'lucide-react';
 
 function getPriorityBadge(priority) {
   const map = {
@@ -13,18 +14,19 @@ function getPriorityBadge(priority) {
 }
 
 function getPlatformIcon(platform) {
-  const map = {
-    instagram: '📸',
-    youtube: '▶️',
-    linkedin: '💼',
+  const iconMap = {
+    instagram: Camera,
+    youtube: Play,
+    linkedin: Briefcase,
   };
-  return map[platform] || '💬';
+  const Icon = iconMap[platform] || MessageCircle;
+  return <Icon size={14} className="opacity-70" />;
 }
 
 function getStatusIcon(status) {
-  if (status === 'replied') return '✅';
-  if (status === 'processed') return '🤖';
-  return '⏳';
+  if (status === 'replied') return <CheckCircle size={14} className="text-green-400" />;
+  if (status === 'processed') return <Zap size={14} className="text-yellow-400" />;
+  return <Clock size={14} className="text-gray-400" />;
 }
 
 function timeAgo(timestamp) {
@@ -51,43 +53,45 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
   });
 
   return (
-    <div className="glass-card overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+    <div className="content-card inbox-card" style={{ maxHeight: 'calc(100vh - 220px)' }}>
       {/* Header */}
-      <div className="p-4 border-b border-white/5">
-        <h2 className="text-sm font-semibold text-gray-300 mb-3">
-          📥 Comment Inbox
-          <span className="ml-2 text-xs text-gray-500">({comments.length})</span>
-        </h2>
+      <div className="content-card-header">
+        <h3>
+          <InboxIcon size={16} />
+          Comment Inbox
+          <span className="ml-2 text-xs font-normal text-gray-500">({comments.length})</span>
+        </h3>
+      </div>
+      
+      {/* Search & Filters */}
+      <div className="p-4 border-b border-white/10 inbox-header">
 
         {/* Search */}
         <input
           type="text"
           placeholder="Search comments..."
-          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-gray-300 placeholder-gray-600 focus:outline-none focus:border-purple-500/50 mb-3"
+          className="w-full mb-3 input-text inbox-search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         {/* Filters */}
-        <div className="flex gap-1 flex-wrap">
+        <div className="inbox-filters">
           {['all', 'pending', 'processed', 'high'].map((f) => (
             <button
               key={f}
-              className={`text-xs px-2.5 py-1 rounded-md transition-all ${
-                filter === f
-                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                  : 'bg-white/5 text-gray-500 hover:text-gray-300 border border-transparent'
-              }`}
+              className={filter === f ? 'filter-button active' : 'filter-button'}
               onClick={() => setFilter(f)}
             >
-              {f === 'all' ? 'All' : f === 'high' ? '🔥 Priority' : f.charAt(0).toUpperCase() + f.slice(1)}
+              {f === 'high' && <Flame size={12} />}
+              {f === 'all' ? 'All' : f === 'high' ? 'Priority' : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
         </div>
       </div>
 
       {/* Comment List */}
-      <div className="overflow-y-auto flex-1">
+      <div className="content-card-body">
         {filtered.length === 0 && (
           <div className="p-6 text-center text-gray-600 text-sm">
             No comments match your filter
@@ -110,7 +114,9 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
                   <span className="text-xs font-semibold text-gray-200 truncate">
                     {comment.follower_name}
                   </span>
-                  <span className="text-xs">{getPlatformIcon(comment.platform)}</span>
+                  <span className="text-xs">
+                    {getPlatformIcon(comment.platform)}
+                  </span>
                   <span className="text-xs text-gray-600 ml-auto flex-shrink-0">
                     {getStatusIcon(comment.status)}
                   </span>

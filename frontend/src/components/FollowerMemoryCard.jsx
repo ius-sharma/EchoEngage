@@ -2,6 +2,7 @@
  * FollowerMemoryCard - Right panel showing follower profile and Hindsight memory
  */
 import { useState } from 'react';
+import { Brain, User, Crown, Target, Database, HelpCircle, ChevronUp, ChevronDown } from 'lucide-react';
 
 function getScoreColor(score) {
   if (score >= 80) return '#a78bfa';
@@ -33,14 +34,18 @@ export default function FollowerMemoryCard({ follower, memory }) {
   const [open, setOpen] = useState(null);
   if (!follower) {
     return (
-      <div className="glass-card h-fit">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-lg">🧠</span>
-          <h3 className="text-sm font-semibold text-gray-400">Follower Memory</h3>
+      <div className="content-card memory-card">
+        <div className="content-card-header">
+          <h3>
+            <Brain size={16} />
+            Follower Memory
+          </h3>
         </div>
-        <div className="text-center py-8">
-          <div className="text-4xl mb-3 opacity-30">👤</div>
-          <p className="text-xs text-gray-600">Select a comment to view follower memory</p>
+        <div className="content-card-body flex items-center justify-center">
+          <div className="text-center py-8">
+            <div className="text-4xl mb-3 opacity-30"><User size={48} /></div>
+            <p className="text-xs text-gray-600">Select a comment to view follower memory</p>
+          </div>
         </div>
       </div>
     );
@@ -52,20 +57,23 @@ export default function FollowerMemoryCard({ follower, memory }) {
   const toggle = s => setOpen(open === s ? null : s);
 
   return (
-    <div className="glass-card h-fit">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-lg">🧠</span>
-        <h3 className="text-sm font-semibold text-gray-400">Follower Memory</h3>
-        <span className="ml-auto text-[10px] text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">Hindsight</span>
+    <div className="content-card memory-card">
+      <div className="content-card-header">
+        <h3>
+          <Brain size={16} />
+          Follower Memory
+          <span className="ml-auto text-[10px] text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full font-normal">Hindsight</span>
+        </h3>
       </div>
-      {/* Profile */}
-      <div className="flex items-center gap-4 mb-4">
-        <div className="relative">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center text-xl font-bold border-2 border-white/10">
-            {follower.name?.charAt(0) || '?'}
+      <div className="content-card-body p-4 space-y-4">
+        {/* Profile */}
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/30 flex items-center justify-center text-xl font-bold border-2 border-white/10">
+              {follower.name?.charAt(0) || '?'}
+            </div>
+            {follower.is_vip && <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center text-[10px]"><Crown size={12} className="text-white" /></div>}
           </div>
-          {follower.is_vip && <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center text-[10px]">👑</div>}
-        </div>
         <div className="flex-1 min-w-0">
           <h4 className="font-semibold text-white truncate">{follower.name}</h4>
           <p className="text-xs text-gray-500">{follower.handle || `@${follower.name?.toLowerCase().replace(/\s/g,'')}`}</p>
@@ -82,17 +90,17 @@ export default function FollowerMemoryCard({ follower, memory }) {
       {/* Interests */}
       {interests.length > 0 && (
         <div className="mb-3">
-          <button className="w-full flex items-center justify-between text-xs font-medium text-gray-400 hover:text-purple-400 transition mb-2" onClick={() => toggle('i')}>
-            <span>🎯 Interests ({interests.length})</span><span className="text-[10px]">{open==='i'?'▲':'▼'}</span>
+          <button className="w-full flex items-center justify-between text-xs font-medium text-gray-400 hover:text-blue-400 transition mb-2" onClick={() => toggle('i')}>
+            <span className="flex items-center gap-1"><Target size={12} /> Interests ({interests.length})</span><span className="text-[10px]">{open==='i'?<ChevronUp size={12} />:<ChevronDown size={12} />}</span>
           </button>
-          {open==='i' && <div className="flex flex-wrap gap-1.5 animate-fade-in">{interests.map((x,i) => <span key={i} className="text-[10px] px-2 py-1 rounded-lg bg-purple-500/10 text-purple-300 border border-purple-500/10">{x}</span>)}</div>}
+          {open==='i' && <div className="flex flex-wrap gap-1.5 animate-fade-in">{interests.map((x,i) => <span key={i} className="text-[10px] px-2 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/10">{x}</span>)}</div>}
         </div>
       )}
       {/* Memory Facts */}
       {facts.length > 0 && (
         <div className="mb-3">
           <button className="w-full flex items-center justify-between text-xs font-medium text-gray-400 hover:text-cyan-400 transition mb-2" onClick={() => toggle('m')}>
-            <span>💾 Memory Facts ({facts.length})</span><span className="text-[10px]">{open==='m'?'▲':'▼'}</span>
+            <span className="flex items-center gap-1"><Database size={12} /> Memory Facts ({facts.length})</span><span className="text-[10px]">{open==='m'?<ChevronUp size={12} />:<ChevronDown size={12} />}</span>
           </button>
           {open==='m' && <div className="space-y-1.5 animate-fade-in max-h-40 overflow-y-auto">{facts.map((f,i) => <div key={i} className="text-xs text-gray-400 bg-white/[0.02] rounded-lg px-3 py-2 border border-white/5"><span className="text-cyan-500 mr-2">•</span>{typeof f==='string'?f:f.content||JSON.stringify(f)}</div>)}</div>}
         </div>
@@ -101,7 +109,7 @@ export default function FollowerMemoryCard({ follower, memory }) {
       {questions.length > 0 && (
         <div>
           <button className="w-full flex items-center justify-between text-xs font-medium text-gray-400 hover:text-yellow-400 transition mb-2" onClick={() => toggle('q')}>
-            <span>❓ Past Questions ({questions.length})</span><span className="text-[10px]">{open==='q'?'▲':'▼'}</span>
+            <span className="flex items-center gap-1"><HelpCircle size={12} /> Past Questions ({questions.length})</span><span className="text-[10px]">{open==='q'?<ChevronUp size={12} />:<ChevronDown size={12} />}</span>
           </button>
           {open==='q' && <div className="space-y-1.5 animate-fade-in max-h-32 overflow-y-auto">{questions.map((q,i) => <div key={i} className="text-xs text-gray-400 bg-yellow-500/5 rounded-lg px-3 py-2 border border-yellow-500/10">"{typeof q==='string'?q:q.text||JSON.stringify(q)}"</div>)}</div>}
         </div>
@@ -115,6 +123,7 @@ export default function FollowerMemoryCard({ follower, memory }) {
         <div className="w-full h-1.5 rounded-full bg-white/5 mt-1.5 overflow-hidden">
           <div className="h-full rounded-full transition-all duration-1000 ease-out" style={{width:`${score}%`,background:`linear-gradient(90deg,${getScoreColor(score)}60,${getScoreColor(score)})`}}/>
         </div>
+      </div>
       </div>
     </div>
   );

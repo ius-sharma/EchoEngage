@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import MetricsBar from './components/MetricsBar';
 import CommentInbox from './components/CommentInbox';
 import CommentDetail from './components/CommentDetail';
@@ -17,6 +19,7 @@ function App() {
   const [seeded, setSeeded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeView, setActiveView] = useState('dashboard');
 
   // Load initial data
   useEffect(() => {
@@ -142,79 +145,98 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen p-4 lg:p-6">
-      {/* Header */}
-      <header className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-xl font-bold">
-            E
-          </div>
-          <div>
-            <h1 className="text-xl font-bold gradient-text">EchoEngage</h1>
-            <p className="text-xs text-gray-500">Creator Relationship Memory Agent</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          {!seeded && (
-            <button className="btn-secondary text-xs" onClick={handleSeedMemories}>
-              🌱 Seed Memories
-            </button>
+    <div className="app-layout">
+      {/* Navbar */}
+      <Navbar seeded={seeded} onSeedMemories={handleSeedMemories} />
+
+      {/* Sidebar + Main Content */}
+      <div className="app-content">
+        <Sidebar activeView={activeView} onViewChange={setActiveView} />
+
+        {/* Main Content Area */}
+        <main className="app-main">
+          {/* Dashboard View */}
+          {activeView === 'dashboard' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
+              <MetricsBar analytics={analytics} />
+
+              {/* Main Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
+                {/* Left: Comment Inbox */}
+                <div className="lg:col-span-3">
+                  <CommentInbox
+                    comments={comments}
+                    selectedId={selectedComment?.id}
+                    onSelect={handleSelectComment}
+                  />
+                </div>
+
+                {/* Center: Comment Detail + Reply */}
+                <div className="lg:col-span-5">
+                  <CommentDetail
+                    comment={selectedComment}
+                    result={agentResult}
+                    processing={processing}
+                    onProcess={handleProcessComment}
+                    onApprove={handleApproveReply}
+                  />
+                </div>
+
+                {/* Right: Memory + Routing */}
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                  <FollowerMemoryCard
+                    follower={followerData?.follower}
+                    memory={followerData?.memory}
+                  />
+                  <RoutingAudit
+                    decision={agentResult?.routing_decision}
+                    analytics={analytics?.routing}
+                  />
+                </div>
+              </div>
+            </div>
           )}
-          {seeded && (
-            <span className="text-xs text-green-400">✅ Memories seeded</span>
+
+          {/* Inbox View */}
+          {activeView === 'inbox' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Inbox</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <CommentInbox
+                  comments={comments}
+                  selectedId={selectedComment?.id}
+                  onSelect={handleSelectComment}
+                />
+                <CommentDetail
+                  comment={selectedComment}
+                  result={agentResult}
+                  processing={processing}
+                  onProcess={handleProcessComment}
+                  onApprove={handleApproveReply}
+                />
+              </div>
+            </div>
           )}
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            Live
-          </div>
-        </div>
-      </header>
 
-      {/* Metrics Bar */}
-      <MetricsBar analytics={analytics} />
+          {/* Coming Soon Views */}
+          {['followers', 'memory', 'routing', 'analytics'].includes(activeView) && (
+            <div className="glass-card p-12 text-center">
+              <div className="text-4xl mb-4">🚀</div>
+              <h2 className="text-xl font-semibold mb-2 capitalize">{activeView} View</h2>
+              <p className="text-gray-400">Coming soon in the next update...</p>
+            </div>
+          )}
 
-      {/* Main Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-4">
-        {/* Left: Comment Inbox */}
-        <div className="lg:col-span-3">
-          <CommentInbox
-            comments={comments}
-            selectedId={selectedComment?.id}
-            onSelect={handleSelectComment}
-          />
-        </div>
-
-        {/* Center: Comment Detail + Reply */}
-        <div className="lg:col-span-5">
-          <CommentDetail
-            comment={selectedComment}
-            result={agentResult}
-            processing={processing}
-            onProcess={handleProcessComment}
-            onApprove={handleApproveReply}
-          />
-        </div>
-
-        {/* Right: Memory + Routing */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
-          <FollowerMemoryCard
-            follower={followerData?.follower}
-            memory={followerData?.memory}
-          />
-          <RoutingAudit
-            decision={agentResult?.routing_decision}
-            analytics={analytics?.routing}
-          />
-        </div>
+          {/* Error toast */}
+          {error && comments.length > 0 && (
+            <div className="fixed bottom-4 right-4 glass-card p-4 text-sm text-red-400 border-red-500/30 animate-fade-in max-w-sm">
+              {error}
+              <button className="ml-2 text-gray-500 hover:text-white" onClick={() => setError(null)}>✕</button>
+            </div>
+          )}
+        </main>
       </div>
-
-      {/* Error toast */}
-      {error && comments.length > 0 && (
-        <div className="fixed bottom-4 right-4 glass-card p-4 text-sm text-red-400 border-red-500/30 animate-fade-in max-w-sm">
-          {error}
-          <button className="ml-2 text-gray-500 hover:text-white" onClick={() => setError(null)}>✕</button>
-        </div>
-      )}
     </div>
   );
 }
