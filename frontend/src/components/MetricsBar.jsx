@@ -41,18 +41,18 @@ export default function MetricsBar({ analytics }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
       {metrics.map((m, i) => {
         const IconComponent = m.icon;
         return (
-          <div key={i} className={`metric-card bg-gradient-to-br ${m.color}`}>
-            <div className="flex items-center gap-2 mb-2">
+          <div key={i} className={`metric-card bg-gradient-to-br min-h-[132px] ${m.color}`}>
+            <div className="flex items-center gap-2 mb-1.5">
               <IconComponent size={18} />
               <span className="text-xs text-gray-400 font-medium">{m.label}</span>
             </div>
             <div className="text-2xl font-bold">{m.value}</div>
             {m.subtitle && (
-              <div className="text-xs text-green-400 mt-1">{m.subtitle}</div>
+              <div className="text-xs text-green-400 mt-1.5">{m.subtitle}</div>
             )}
           </div>
         );

@@ -45,21 +45,21 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
   const PlatformIconComponent = getPlatformIcon(comment.platform);
 
   return (
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="glass-card p-0 overflow-hidden min-h-[720px] flex flex-col border border-slate-700/30 shadow-lg rounded-2xl">
       {/* Comment Header */}
       <div className="p-6 border-b border-white/5">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/30 flex items-center justify-center text-lg font-bold border border-white/10">
+        <div className="flex items-start justify-between gap-4 mb-5">
+          <div className="flex items-start gap-4 min-w-0">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/30 flex items-center justify-center text-lg font-bold border border-white/10 flex-shrink-0 shadow-lg shadow-blue-500/10">
               {comment.follower_name?.charAt(0) || '?'}
             </div>
-            <div>
-              <h3 className="font-semibold text-white text-base">{comment.follower_name}</h3>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+            <div className="min-w-0">
+              <h3 className="font-semibold text-white text-base truncate">{comment.follower_name}</h3>
+              <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
                 <PlatformIconComponent size={14} />
-                <span>{comment.platform}</span>
+                <span className="capitalize">{comment.platform}</span>
                 <span>•</span>
-                <span>{comment.follower_handle || '@user'}</span>
+                <span className="truncate">{comment.follower_handle || '@user'}</span>
               </div>
             </div>
           </div>
@@ -70,11 +70,11 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
         </div>
 
         {/* Original Comment */}
-        <div className="bg-white/[0.03] rounded-xl p-5 border border-white/5">
-          <p className="text-sm text-gray-200 leading-relaxed mb-3">{comment.message}</p>
+        <div className="bg-white/[0.03] rounded-xl p-6 border border-white/5 shadow-lg shadow-black/10">
+          <p className="text-sm text-gray-200 leading-7 mb-4">{comment.message}</p>
           <div className="flex items-center gap-3 text-xs text-gray-500">
             {comment.post_context && (
-              <span className="truncate max-w-[200px]">
+              <span className="truncate max-w-[240px]">
                 on: "{comment.post_context}"
               </span>
             )}
@@ -83,7 +83,7 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
       </div>
 
       {/* Agent Actions */}
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-6 flex-1 flex flex-col">
         {/* Process Button */}
         {!result && (
           <button
@@ -109,10 +109,10 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
 
         {/* Agent Result */}
         {result && (
-          <div className="space-y-5 animate-fade-in">
+          <div className="space-y-6 animate-fade-in flex-1 flex flex-col">
             {/* Classification */}
             {result.classification && (
-              <div className="flex items-center gap-3 text-xs bg-white/[0.02] rounded-lg p-3 border border-white/5">
+              <div className="flex items-center gap-3 text-xs bg-white/[0.02] rounded-lg p-4 border border-white/5">
                 <span className="text-gray-500 font-medium">Intent:</span>
                 <span className="badge badge-ghost text-xs">{result.classification.intent}</span>
                 <span className="text-gray-500 font-medium ml-2">Complexity:</span>
@@ -121,8 +121,8 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
             )}
 
             {/* Suggested Reply */}
-            <div className="bg-gradient-to-br from-blue-500/8 to-cyan-500/8 rounded-xl p-5 border border-blue-500/15">
-              <div className="flex items-center justify-between mb-3">
+            <div className="bg-gradient-to-br from-blue-500/8 to-cyan-500/8 rounded-xl p-6 border border-blue-500/15 shadow-lg shadow-blue-500/5">
+              <div className="flex items-center justify-between mb-4 gap-3">
                 <h4 className="text-sm font-semibold text-blue-300 flex items-center gap-2">
                   <Lightbulb size={15} /> AI-Generated Reply
                 </h4>
@@ -132,18 +132,18 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm text-gray-200 leading-7 whitespace-pre-wrap">
                 {result.suggested_reply}
               </p>
             </div>
 
             {/* Explanation */}
             {result.explanation && (
-              <div className="bg-white/[0.02] rounded-lg p-4 border border-white/5">
+              <div className="bg-white/[0.02] rounded-lg p-5 border border-white/5">
                 <h5 className="text-xs font-semibold text-cyan-400 mb-2 flex items-center gap-2">
                   <Lightbulb size={13} /> Why this reply?
                 </h5>
-                <p className="text-xs text-gray-400 leading-relaxed">{result.explanation}</p>
+                <p className="text-xs text-gray-400 leading-6">{result.explanation}</p>
               </div>
             )}
 
@@ -158,9 +158,9 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
                   <span className="text-[11px] ml-auto">{showMemoryFacts ? <ChevronUp size={13} /> : <ChevronDown size={13} />}</span>
                 </button>
                 {showMemoryFacts && (
-                  <div className="mt-3 space-y-2 animate-fade-in">
+                  <div className="mt-4 space-y-2.5 animate-fade-in">
                     {result.memory_context.map((fact, i) => (
-                      <div key={i} className="text-xs text-gray-400 bg-white/[0.02] rounded px-4 py-2 border border-white/5 hover:border-white/10 transition">
+                      <div key={i} className="text-xs text-gray-400 bg-white/[0.02] rounded-xl px-4 py-3 border border-white/5 hover:border-white/10 transition leading-6">
                         {typeof fact === 'string' ? fact : fact.content || JSON.stringify(fact)}
                       </div>
                     ))}
@@ -171,12 +171,12 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
 
             {/* New Memory to Save */}
             {result.memory_updates && result.memory_updates.length > 0 && (
-              <div className="bg-green-500/8 rounded-lg p-4 border border-green-500/15">
+              <div className="bg-green-500/8 rounded-lg p-5 border border-green-500/15">
                 <h5 className="text-xs font-semibold text-green-400 mb-3 flex items-center gap-2">
                   <Save size={13} /> New facts to remember
                 </h5>
                 {result.memory_updates.map((update, i) => (
-                  <div key={i} className="text-xs text-gray-400 flex items-start gap-3 mb-2 last:mb-0">
+                  <div key={i} className="text-xs text-gray-400 flex items-start gap-3 mb-2 last:mb-0 leading-6">
                     <span className="text-green-500 font-bold mt-0.5">+</span>
                     <span>{typeof update === 'string' ? update : update.content || JSON.stringify(update)}</span>
                   </div>
@@ -196,18 +196,18 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-4 pt-3">
+            <div className="mt-auto flex gap-4 pt-2">
               {!result.approved ? (
                 <>
                   <button
                     id="approve-reply-btn"
-                    className="btn-primary flex-1 py-3 flex items-center justify-center gap-2 font-semibold text-sm"
+                    className="btn-primary flex-1 py-3.5 flex items-center justify-center gap-2 font-semibold text-sm"
                     onClick={onApprove}
                   >
                     <CheckCircle size={16} /> Approve & Send
                   </button>
                   <button
-                    className="btn-secondary flex-1 py-3 font-semibold text-sm"
+                    className="btn-secondary flex-1 py-3.5 font-semibold text-sm"
                     onClick={onProcess}
                     disabled={processing}
                   >

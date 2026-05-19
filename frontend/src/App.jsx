@@ -162,7 +162,7 @@ function App() {
               <MetricsBar analytics={analytics} />
 
               {/* Main Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
                 {/* Left: Comment Inbox */}
                 <div className="lg:col-span-3">
                   <CommentInbox
@@ -184,7 +184,7 @@ function App() {
                 </div>
 
                 {/* Right: Memory + Routing */}
-                <div className="lg:col-span-4 flex flex-col gap-4">
+                <div className="lg:col-span-4 flex flex-col gap-6">
                   <FollowerMemoryCard
                     follower={followerData?.follower}
                     memory={followerData?.memory}
@@ -202,7 +202,7 @@ function App() {
           {activeView === 'inbox' && (
             <div>
               <h2 className="text-2xl font-bold mb-6">Inbox</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <CommentInbox
                   comments={comments}
                   selectedId={selectedComment?.id}

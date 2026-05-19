@@ -2,7 +2,7 @@
  * CommentInbox - Left sidebar with comment list
  */
 import { useState } from 'react';
-import { Camera, Play, Briefcase, MessageCircle, CheckCircle, Zap, Clock, Flame, Inbox as InboxIcon } from 'lucide-react';
+import { Camera, Play, Briefcase, MessageCircle, CheckCircle, Zap, Clock, Flame, Inbox as InboxIcon, Search } from 'lucide-react';
 
 function getPriorityBadge(priority) {
   const map = {
@@ -64,16 +64,21 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
       </div>
       
       {/* Search & Filters */}
-      <div className="p-4 border-b border-white/10 inbox-header">
+      <div className="inbox-header">
 
         {/* Search */}
-        <input
-          type="text"
-          placeholder="Search comments..."
-          className="w-full mb-3 input-text inbox-search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="inbox-search-wrap mb-8">
+          <input
+            type="text"
+            placeholder="Search comments or names..."
+            className="w-full inbox-search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button type="button" className="inbox-search-action" aria-label="Search comments">
+            <Search className="h-5 w-5" />
+          </button>
+        </div>
 
         {/* Filters */}
         <div className="inbox-filters">
@@ -103,32 +108,44 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
             className={`comment-item ${selectedId === comment.id ? 'active' : ''}`}
             onClick={() => onSelect(comment)}
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-4">
               <img
                 src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${comment.follower_name.split(' ')[0]}`}
                 alt={comment.follower_name}
-                className="w-8 h-8 rounded-full flex-shrink-0 bg-white/10"
+                className="w-12 h-12 rounded-full flex-shrink-0 bg-white/10 border border-white/10 shadow-lg shadow-black/10"
               />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-semibold text-gray-200 truncate">
-                    {comment.follower_name}
-                  </span>
-                  <span className="text-xs">
-                    {getPlatformIcon(comment.platform)}
-                  </span>
-                  <span className="text-xs text-gray-600 ml-auto flex-shrink-0">
-                    {getStatusIcon(comment.status)}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                  {comment.message}
-                </p>
-                <div className="flex items-center gap-2 mt-1.5">
+
+              <div className="flex-1 min-w-0 space-y-2">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-100 truncate">
+                        {comment.follower_name}
+                      </span>
+                      <span className="text-[11px] text-gray-500 flex items-center gap-1 shrink-0">
+                        {getPlatformIcon(comment.platform)}
+                        <span className="truncate">{comment.platform}</span>
+                      </span>
+                    </div>
+                    <div className="mt-1 text-[11px] text-gray-500 flex items-center gap-2">
+                      <span>{comment.follower_handle || '@user'}</span>
+                      <span className="text-gray-700">•</span>
+                      <span className="flex items-center gap-1">{getStatusIcon(comment.status)}<span className="capitalize">{comment.status}</span></span>
+                    </div>
+                  </div>
+
                   <span className={`badge ${getPriorityBadge(comment.priority).class}`} style={{ fontSize: '9px', padding: '2px 6px' }}>
                     {getPriorityBadge(comment.priority).label}
                   </span>
-                  <span className="text-xs text-gray-600">{timeAgo(comment.timestamp)}</span>
+                </div>
+
+                <p className="text-xs text-gray-400 line-clamp-2 leading-5 max-w-[95%]">
+                  {comment.message}
+                </p>
+
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/5">
+                  <span className="text-[11px] text-gray-500">{timeAgo(comment.timestamp)}</span>
+                  <span className="text-[11px] text-gray-500">Tap to open</span>
                 </div>
               </div>
             </div>
