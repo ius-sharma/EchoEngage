@@ -40,6 +40,13 @@ export const api = {
       body: JSON.stringify({ comment_id: commentId }),
     }),
 
+  // Regenerate a reply (re-run the full pipeline)
+  regenerateReply: (commentId) =>
+    fetchJSON('/regenerate', {
+      method: 'POST',
+      body: JSON.stringify({ comment_id: commentId }),
+    }),
+
   // Analytics
   getAnalytics: () => fetchJSON('/analytics'),
 

@@ -200,6 +200,83 @@ async def approve_reply(request: ApproveRequest):
     return {"status": "approved", "comment_id": request.comment_id}
 
 
+# ─── Regenerate Reply ──────────────────────────────────────────────
+
+@router.post("/regenerate")
+async def regenerate_reply(request: ProcessRequest):
+    """
+    Re-process a comment through the full LangGraph pipeline.
+    Unlike /process, this always runs the pipeline even if already processed.
+    """
+    # Find the comment
+    comment = None
+    for c in COMMENTS:
+        if c["id"] == request.comment_id:
+            comment = c
+            break
+
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    # Get the follower
+    follower = get_follower_by_id(comment["follower_id"])
+    if not follower:
+        raise HTTPException(status_code=404, detail="Follower not found")
+
+    # Build initial state for the LangGraph agent
+    initial_state = {
+        "messages": [],
+        "comment_id": comment["id"],
+        "comment_text": comment["message"],
+        "follower_id": comment["follower_id"],
+        "follower_name": comment["follower_name"],
+        "platform": comment["platform"],
+        "post_context": comment.get("post_context", "general post"),
+        "memory_context": None,
+        "classification": None,
+        "routing_decision": None,
+        "selected_model": None,
+        "suggested_reply": None,
+        "explanation": None,
+        "memory_updates": None,
+        "priority_label": None,
+        "quality_passed": None,
+        "quality_reason": None,
+        "escalation_count": 0
+    }
+
+    try:
+        # Run the LangGraph agent
+        graph = get_agent_graph()
+        final_state = await graph.ainvoke(initial_state)
+
+        # Build response
+        result = {
+            "comment_id": comment["id"],
+            "follower_id": comment["follower_id"],
+            "follower_name": comment["follower_name"],
+            "suggested_reply": final_state.get("suggested_reply", ""),
+            "priority_label": final_state.get("priority_label", "Low Priority"),
+            "explanation": final_state.get("explanation", ""),
+            "memory_updates": final_state.get("memory_updates", []),
+            "memory_context": final_state.get("memory_context", ""),
+            "classification": final_state.get("classification", {}),
+            "routing_decision": final_state.get("routing_decision", {}),
+            "quality_passed": final_state.get("quality_passed", True),
+            "quality_reason": final_state.get("quality_reason", "")
+        }
+
+        # Update stored result (overwrite previous)
+        processed_comments[request.comment_id] = result
+
+        logger.info(f"🔄 Regenerated reply for comment {comment['id']} for {comment['follower_name']}")
+        return {"status": "success", "result": result}
+
+    except Exception as e:
+        logger.error(f"❌ Error regenerating reply: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ─── Analytics ─────────────────────────────────────────────────────
 
 @router.get("/analytics")

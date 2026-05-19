@@ -67,7 +67,7 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
       <div className="inbox-header">
 
         {/* Search */}
-        <div className="inbox-search-wrap mb-8">
+        <div className="inbox-search-wrap">
           <input
             type="text"
             placeholder="Search comments or names..."
@@ -96,7 +96,7 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
       </div>
 
       {/* Comment List */}
-      <div className="content-card-body">
+      <div className="inbox-comment-list">
         {filtered.length === 0 && (
           <div className="p-6 text-center text-gray-600 text-sm">
             No comments match your filter
@@ -108,15 +108,15 @@ export default function CommentInbox({ comments, selectedId, onSelect }) {
             className={`comment-item ${selectedId === comment.id ? 'active' : ''}`}
             onClick={() => onSelect(comment)}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3">
               <img
                 src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${comment.follower_name.split(' ')[0]}`}
                 alt={comment.follower_name}
-                className="w-12 h-12 rounded-full flex-shrink-0 bg-white/10 border border-white/10 shadow-lg shadow-black/10"
+                className="w-9 h-9 rounded-full flex-shrink-0 bg-white/10 border border-white/10 shadow-sm"
               />
 
               <div className="flex-1 min-w-0 space-y-2">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-semibold text-gray-100 truncate">

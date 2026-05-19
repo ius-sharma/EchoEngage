@@ -145,20 +145,24 @@ small {
   background: rgba(59, 130, 246, 0.08);
   color: var(--text-secondary);
   border: 1.5px solid rgba(59, 130, 246, 0.18);
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 8px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   transition: background-color 0.12s linear, border-color 0.12s linear, color 0.12s linear;
   user-select: none;
   text-transform: none;
   letter-spacing: 0.2px;
   flex: 0 1 auto;
-  min-width: 48px;
+  min-width: 0;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .filter-button:hover {
   background: rgba(59, 130, 246, 0.12);
@@ -1155,15 +1159,16 @@ label {
 
 /* ─── Comment Item ────────────────────────────────────────────── */
 .comment-item {
-  padding: 14px;
-  margin: 0 8px 14px;
+  padding: 12px;
+  margin: 0 0 10px;
   border: 1px solid rgba(51, 65, 85, 0.28);
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(30, 45, 74, 0.72);
-  border-left: 4px solid transparent;
+  border-left: 3px solid transparent;
   cursor: pointer;
   transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+  overflow: hidden;
 }
 
 .comment-item:hover {
@@ -1398,12 +1403,13 @@ label {
 .content-card {
   background: var(--bg-card);
   border: 1px solid rgba(51, 65, 85, 0.3);
-  border-radius: 24px;
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  min-width: 0;
 }
 
 .content-card:hover {
@@ -1416,23 +1422,22 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 24px 20px;
+  padding: 16px 16px 14px;
   border-bottom: 1px solid var(--border-subtle);
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(59, 130, 246, 0) 100%);
+  gap: 8px;
+  min-width: 0;
 }
 
 .content-card-header h3 {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
-.inbox-header {
-  padding: 14px 18px 6px;
-}
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 0;
 }
-  padding: 12px 16px;
 .content-card-header-icon {
   width: 18px;
   height: 18px;
@@ -1443,6 +1448,23 @@ label {
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  min-width: 0;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .content-card-body {
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-card-body {
+    padding: 12px 14px;
+  }
 }
 
 .content-card-footer {
@@ -1457,10 +1479,54 @@ label {
 
 .memory-card {
   min-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .routing-card {
   min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure card headers wrap properly on small screens */
+.content-card-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
+.content-card-header h3 span {
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .content-card-header h3 span {
+    margin-left: 0;
+    margin-top: 4px;
+    order: 3;
+    width: 100%;
+  }
+}
+
+/* ─── Card Body Section Spacing ───────────────────────────── */
+/* NOTE: Do NOT re-declare display/flex-direction here. The primary
+   .content-card-body definition above already handles that. Only
+   add gap for direct children so nested layouts remain untouched. */
+
+.content-card-body > .comment-item {
+  margin-bottom: 0; /* gap handles spacing between siblings */
+}
+
+/* Responsive grid tweaks */
+@media (max-width: 640px) {
+  .content-card-body > .grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* ─── Quick Action Buttons ────────────────────────────────────── */
@@ -2267,160 +2333,98 @@ label {
 /* ─── FILTER BUTTONS & REFINED ELEMENT STYLING ────────────────────── */
 /* ═══════════════════════════════════════════════════════════════ */
 
-/* Filter Button Styling */
-.filter-button {
-  background: rgba(59, 130, 246, 0.08);
-  color: var(--text-secondary);
-  border: 1.5px solid rgba(59, 130, 246, 0.18);
-  padding: 5px 8px;
-  border-radius: 7px;
-  font-size: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-  user-select: none;
-  text-transform: capitalize;
-  letter-spacing: 0.2px;
-  flex-shrink: 0;
-}
-
-.filter-button:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.35);
-  color: var(--text-primary);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-}
-
-.filter-button.active {
-  background: var(--gradient-primary);
-  border-color: var(--accent-primary-light);
-  color: white;
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
-  transform: translateY(-1px);
-}
+/* Filter buttons use the global `.filter-button` definition near the top of this file. */
 
 /* Header Section with Search & Filters */
-.inbox-filters {
+.inbox-header {
+  padding: 10px 14px 8px;
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap; /* allow chips to wrap on narrow cards */
-  padding: 0;
-  margin-top: 8px;
-  margin-bottom: 12px;
-  align-items: center;
 }
 
-/* On larger widths keep filters inline and allow horizontal scroll if needed */
-@media (min-width: 768px) {
-  .inbox-filters {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  .inbox-filters::-webkit-scrollbar { display: none; }
+.inbox-filters {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+  padding: 0;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  align-items: center;
+  overflow-x: auto;
 }
+
+.inbox-filters::-webkit-scrollbar { display: none; }
+
 /* Search input base and placeholder tweaks */
 .inbox-search-wrap {
   position: relative;
 }
 
 .inbox-search {
-  height: 62px;
+  height: 42px;
   width: 100%;
-  padding: 0 80px 0 22px !important;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  background: #f4f4f5;
-  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.18);
-  color: #1f2937;
+  padding: 0 48px 0 14px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: rgba(30, 45, 74, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  color: var(--text-primary);
+  font-size: 13px;
   line-height: 1;
 }
 
 .inbox-search::placeholder {
-  color: #9ca3af;
+  color: var(--text-muted);
   font-weight: 400;
+  font-size: 12px;
 }
 
 .inbox-search:hover {
-  border-color: rgba(148, 163, 184, 0.7) !important;
-  background: #f8fafc !important;
+  border-color: rgba(96, 165, 250, 0.35) !important;
+  background: rgba(30, 45, 74, 0.8) !important;
 }
 
 .inbox-search:focus {
-  border-color: rgba(148, 163, 184, 0.85) !important;
-  background: #ffffff !important;
-  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25), 0 10px 22px rgba(15, 23, 42, 0.18) !important;
+  border-color: var(--accent-primary-light) !important;
+  background: rgba(30, 45, 74, 0.9) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   outline: none;
 }
 
 .inbox-search-action {
   position: absolute;
-  right: 8px;
+  right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: 0;
-  background: #1f1b1b;
-  color: #e5e7eb;
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--accent-primary-light);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 22px rgba(2, 6, 23, 0.35);
-  pointer-events: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Responsive adjustments for the search pill and action button */
-@media (max-width: 1024px) {
-  .inbox-search {
-    height: 54px;
-    padding: 0 72px 0 18px !important;
-  }
-  .inbox-search-action {
-    width: 44px;
-    height: 44px;
-    right: 10px;
-  }
+.inbox-search-action:hover {
+  background: rgba(59, 130, 246, 0.35);
 }
 
-@media (max-width: 640px) {
-  .inbox-search {
-    height: 48px;
-    padding: 0 64px 0 14px !important;
-    font-size: 14px;
-  }
-  .inbox-search-action {
-    width: 40px;
-    height: 40px;
-    right: 8px;
-  }
+.inbox-search-action svg {
+  width: 16px;
+  height: 16px;
 }
 
-@media (max-width: 420px) {
-  .inbox-search {
-    height: 44px;
-    padding: 0 56px 0 12px !important;
-    font-size: 13px;
-  }
-  .inbox-search-action {
-    width: 36px;
-    height: 36px;
-    right: 6px;
-  }
-}
-
-.inbox-filters::-webkit-scrollbar {
-  display: none;
-}
-
-/* Add subtle top spacing so filters sit below the search visually */
-.inbox-filters {
-  margin-top: 8px;
+/* Comment list scroll container */
+.inbox-comment-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px;
+  min-height: 0;
 }
 
 /* Follower Memory Card Styling */
@@ -2564,3 +2568,550 @@ label {
   color: var(--text-secondary);
 }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ─── COMMENT DETAIL CARD ──────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.detail-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(51, 65, 85, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  min-height: 720px;
+  overflow: hidden;
+}
+
+.detail-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, transparent 100%);
+}
+
+.detail-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.detail-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.detail-card-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.detail-section {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+
+.detail-classification {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.detail-classification-item {
+  flex: 1;
+  min-width: 100px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.detail-classification-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.detail-classification-value {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.detail-reply-box {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(6, 182, 212, 0.04));
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.06);
+}
+
+.detail-explanation {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.detail-expandable {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.detail-expandable-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.detail-expandable-btn:hover {
+  color: #60a5fa;
+}
+
+.detail-fact-item {
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 12px;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+
+.detail-fact-item:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.detail-memory-save {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.detail-quality {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+
+.detail-quality.passed {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.detail-quality.warning {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.detail-approved {
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #34d399;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ─── FOLLOWER MEMORY CARD ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.memory-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.memory-profile {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.memory-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.memory-vip-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+}
+
+.memory-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memory-handle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.memory-interactions {
+  font-size: 11px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.memory-score-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.memory-score-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #475569;
+  font-weight: 600;
+}
+
+.memory-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.memory-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  letter-spacing: 0.2px;
+}
+
+.memory-expandable-section {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.memory-expand-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.memory-expand-btn:hover {
+  color: #60a5fa;
+}
+
+.memory-expand-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.memory-interest-tag {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+}
+
+.memory-fact-item {
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.memory-question-item {
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.memory-score-bar-section {
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: auto;
+}
+
+.memory-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.memory-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ─── ROUTING AUDIT CARD ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.routing-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.routing-decision {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.routing-model-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.routing-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.routing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.routing-dot.green { background: #34d399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.4); }
+.routing-dot.amber { background: #fbbf24; box-shadow: 0 0 8px rgba(251, 191, 36, 0.4); }
+
+.routing-model-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.routing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.routing-grid-item {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 14px 14px;
+}
+
+.routing-grid-label {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.routing-grid-value {
+  font-size: 14px;
+  font-weight: 700;
+}
+.routing-grid-value.green { color: #34d399; }
+.routing-grid-value.amber { color: #fbbf24; }
+.routing-grid-value.cyan { color: #22d3ee; }
+.routing-grid-value.white { color: var(--text-primary); }
+
+.routing-reason {
+  font-size: 12px;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px 14px;
+  line-height: 1.6;
+}
+
+.routing-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.routing-stats.has-border {
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.routing-stats-title {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.routing-stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.routing-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.routing-stat-label {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.routing-stat-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+.routing-stat-value.green { color: #34d399; }
+.routing-stat-value.amber { color: #fbbf24; }
+.routing-stat-value.white { color: var(--text-primary); }
+
+.routing-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.routing-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.6), #34d399);
+  transition: width 0.7s ease-out;
+}

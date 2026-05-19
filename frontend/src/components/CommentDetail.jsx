@@ -23,7 +23,7 @@ function getPriorityConfig(priority) {
   return map[priority] || map.low;
 }
 
-export default function CommentDetail({ comment, result, processing, onProcess, onApprove }) {
+export default function CommentDetail({ comment, result, processing, onProcess, onApprove, onRegenerate }) {
   const [showMemoryFacts, setShowMemoryFacts] = useState(false);
 
   if (!comment) {
@@ -45,50 +45,47 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
   const PlatformIconComponent = getPlatformIcon(comment.platform);
 
   return (
-    <div className="glass-card p-0 overflow-hidden min-h-[720px] flex flex-col border border-slate-700/30 shadow-lg rounded-2xl">
-      {/* Comment Header */}
-      <div className="p-6 border-b border-white/5">
-        <div className="flex items-start justify-between gap-4 mb-5">
-          <div className="flex items-start gap-4 min-w-0">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/30 flex items-center justify-center text-lg font-bold border border-white/10 flex-shrink-0 shadow-lg shadow-blue-500/10">
-              {comment.follower_name?.charAt(0) || '?'}
-            </div>
-            <div className="min-w-0">
-              <h3 className="font-semibold text-white text-base truncate">{comment.follower_name}</h3>
-              <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
-                <PlatformIconComponent size={14} />
-                <span className="capitalize">{comment.platform}</span>
-                <span>•</span>
-                <span className="truncate">{comment.follower_handle || '@user'}</span>
-              </div>
+    <div className="detail-card">
+      {/* ── Comment Header ───────────────────── */}
+      <div className="detail-card-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+          <div className="detail-avatar">
+            {comment.follower_name?.charAt(0) || '?'}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="detail-name">{comment.follower_name}</div>
+            <div className="detail-meta">
+              <PlatformIconComponent size={13} />
+              <span style={{ textTransform: 'capitalize' }}>{comment.platform}</span>
+              <span style={{ opacity: 0.4 }}>•</span>
+              <span>{comment.follower_handle || '@user'}</span>
             </div>
           </div>
-          <span className={`badge ${priorityConfig.class} flex items-center gap-1 flex-shrink-0`}>
-            <PriorityIcon size={12} />
-            {priorityConfig.label}
-          </span>
         </div>
-
-        {/* Original Comment */}
-        <div className="bg-white/[0.03] rounded-xl p-6 border border-white/5 shadow-lg shadow-black/10">
-          <p className="text-sm text-gray-200 leading-7 mb-4">{comment.message}</p>
-          <div className="flex items-center gap-3 text-xs text-gray-500">
-            {comment.post_context && (
-              <span className="truncate max-w-[240px]">
-                on: "{comment.post_context}"
-              </span>
-            )}
-          </div>
-        </div>
+        <span className={`badge ${priorityConfig.class}`} style={{ fontSize: '10px', padding: '4px 10px', flexShrink: 0 }}>
+          <PriorityIcon size={11} />
+          {priorityConfig.label}
+        </span>
       </div>
 
-      {/* Agent Actions */}
-      <div className="p-6 space-y-6 flex-1 flex flex-col">
+      {/* ── Body ─────────────────────────────── */}
+      <div className="detail-card-body">
+        {/* Original Comment */}
+        <div className="detail-section">
+          <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7 }}>{comment.message}</p>
+          {comment.post_context && (
+            <div style={{ marginTop: '10px', fontSize: '11px', color: '#64748b' }}>
+              on: "{comment.post_context}"
+            </div>
+          )}
+        </div>
+
         {/* Process Button */}
         {!result && (
           <button
             id="process-comment-btn"
-            className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold"
+            className="btn-primary"
+            style={{ width: '100%', padding: '14px 20px', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             onClick={onProcess}
             disabled={processing}
           >
@@ -101,7 +98,6 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
               <>
                 <Zap size={16} />
                 Generate AI Reply
-                <span className="text-xs opacity-60 ml-1">(LangGraph → Hindsight → CascadeFlow)</span>
               </>
             )}
           </button>
@@ -109,58 +105,64 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
 
         {/* Agent Result */}
         {result && (
-          <div className="space-y-6 animate-fade-in flex-1 flex flex-col">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
             {/* Classification */}
             {result.classification && (
-              <div className="flex items-center gap-3 text-xs bg-white/[0.02] rounded-lg p-4 border border-white/5">
-                <span className="text-gray-500 font-medium">Intent:</span>
-                <span className="badge badge-ghost text-xs">{result.classification.intent}</span>
-                <span className="text-gray-500 font-medium ml-2">Complexity:</span>
-                <span className="badge badge-ghost text-xs">{result.classification.complexity}</span>
+              <div className="detail-classification">
+                <div className="detail-classification-item">
+                  <span className="detail-classification-label">Intent</span>
+                  <span className="detail-classification-value">{result.classification.intent}</span>
+                </div>
+                <div className="detail-classification-item">
+                  <span className="detail-classification-label">Complexity</span>
+                  <span className="detail-classification-value">{result.classification.complexity}</span>
+                </div>
               </div>
             )}
 
             {/* Suggested Reply */}
-            <div className="bg-gradient-to-br from-blue-500/8 to-cyan-500/8 rounded-xl p-6 border border-blue-500/15 shadow-lg shadow-blue-500/5">
-              <div className="flex items-center justify-between mb-4 gap-3">
-                <h4 className="text-sm font-semibold text-blue-300 flex items-center gap-2">
-                  <Lightbulb size={15} /> AI-Generated Reply
+            <div className="detail-reply-box">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '10px' }}>
+                <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#93c5fd', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Lightbulb size={14} /> AI-Generated Reply
                 </h4>
                 {result.model_used && (
-                  <span className="text-[11px] text-gray-500 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-                    via {result.model_used}
+                  <span style={{ fontSize: '10px', color: '#64748b', background: 'rgba(255,255,255,0.05)', padding: '3px 8px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
+                    {result.model_used}
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-200 leading-7 whitespace-pre-wrap">
+              <p style={{ fontSize: '13px', color: '#e2e8f0', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
                 {result.suggested_reply}
               </p>
             </div>
 
             {/* Explanation */}
             {result.explanation && (
-              <div className="bg-white/[0.02] rounded-lg p-5 border border-white/5">
-                <h5 className="text-xs font-semibold text-cyan-400 mb-2 flex items-center gap-2">
-                  <Lightbulb size={13} /> Why this reply?
+              <div className="detail-explanation">
+                <h5 style={{ fontSize: '12px', fontWeight: 600, color: '#22d3ee', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Lightbulb size={12} /> Why this reply?
                 </h5>
-                <p className="text-xs text-gray-400 leading-6">{result.explanation}</p>
+                <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.6 }}>{result.explanation}</p>
               </div>
             )}
 
             {/* Memory Facts Used */}
             {result.memory_context && result.memory_context.length > 0 && (
-              <div>
+              <div className="detail-expandable">
                 <button
-                  className="text-xs text-gray-500 hover:text-blue-400 transition flex items-center gap-2 font-medium"
+                  className="detail-expandable-btn"
                   onClick={() => setShowMemoryFacts(!showMemoryFacts)}
                 >
-                  <Brain size={13} /> Memory facts used ({result.memory_context.length})
-                  <span className="text-[11px] ml-auto">{showMemoryFacts ? <ChevronUp size={13} /> : <ChevronDown size={13} />}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Brain size={13} /> Memory facts used ({result.memory_context.length})
+                  </span>
+                  {showMemoryFacts ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                 </button>
                 {showMemoryFacts && (
-                  <div className="mt-4 space-y-2.5 animate-fade-in">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
                     {result.memory_context.map((fact, i) => (
-                      <div key={i} className="text-xs text-gray-400 bg-white/[0.02] rounded-xl px-4 py-3 border border-white/5 hover:border-white/10 transition leading-6">
+                      <div key={i} className="detail-fact-item">
                         {typeof fact === 'string' ? fact : fact.content || JSON.stringify(fact)}
                       </div>
                     ))}
@@ -171,13 +173,13 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
 
             {/* New Memory to Save */}
             {result.memory_updates && result.memory_updates.length > 0 && (
-              <div className="bg-green-500/8 rounded-lg p-5 border border-green-500/15">
-                <h5 className="text-xs font-semibold text-green-400 mb-3 flex items-center gap-2">
+              <div className="detail-memory-save">
+                <h5 style={{ fontSize: '12px', fontWeight: 600, color: '#34d399', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Save size={13} /> New facts to remember
                 </h5>
                 {result.memory_updates.map((update, i) => (
-                  <div key={i} className="text-xs text-gray-400 flex items-start gap-3 mb-2 last:mb-0 leading-6">
-                    <span className="text-green-500 font-bold mt-0.5">+</span>
+                  <div key={i} style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'flex-start', gap: '6px', marginBottom: '4px', lineHeight: 1.5 }}>
+                    <span style={{ color: '#34d399', fontWeight: 700, flexShrink: 0 }}>+</span>
                     <span>{typeof update === 'string' ? update : update.content || JSON.stringify(update)}</span>
                   </div>
                 ))}
@@ -186,37 +188,47 @@ export default function CommentDetail({ comment, result, processing, onProcess, 
 
             {/* Quality Gate */}
             {result.quality_gate_result && (
-              <div className={`text-xs flex items-center gap-2 font-medium p-3 rounded-lg ${
-                result.quality_gate_result.passed ? 'text-green-400 bg-green-500/8 border border-green-500/15' : 'text-yellow-400 bg-yellow-500/8 border border-yellow-500/15'
-              }`}>
+              <div className={`detail-quality ${result.quality_gate_result.passed ? 'passed' : 'warning'}`}>
                 {result.quality_gate_result.passed ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}
-                Quality: {result.quality_gate_result.score || 'N/A'}/10
-                {result.quality_gate_result.escalated && ' (escalated to stronger model)'}
+                <span>Quality: {result.quality_gate_result.score || 'N/A'}/10</span>
+                {result.quality_gate_result.escalated && <span>(escalated to stronger model)</span>}
               </div>
             )}
 
             {/* Action Buttons */}
-            <div className="mt-auto flex gap-4 pt-2">
+            <div style={{ marginTop: 'auto', display: 'flex', gap: '10px', paddingTop: '8px' }}>
               {!result.approved ? (
                 <>
                   <button
                     id="approve-reply-btn"
-                    className="btn-primary flex-1 py-3.5 flex items-center justify-center gap-2 font-semibold text-sm"
+                    className="btn-primary"
+                    style={{ flex: 1, padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontWeight: 600, fontSize: '13px' }}
                     onClick={onApprove}
                   >
-                    <CheckCircle size={16} /> Approve & Send
+                    <CheckCircle size={15} /> Approve & Send
                   </button>
                   <button
-                    className="btn-secondary flex-1 py-3.5 font-semibold text-sm"
-                    onClick={onProcess}
+                    className="btn-secondary"
+                    style={{ flex: 1, padding: '14px', fontWeight: 600, fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                    onClick={onRegenerate || onProcess}
                     disabled={processing}
                   >
-                    🔄 Regenerate
+                    {processing ? (
+                      <>
+                        <div className="spinner" style={{ width: 14, height: 14 }}></div>
+                        Regenerating...
+                      </>
+                    ) : (
+                      '🔄 Regenerate'
+                    )}
                   </button>
                 </>
               ) : (
-                <div className="flex-1 text-center py-3 rounded-xl bg-green-500/12 border border-green-500/25 text-green-400 text-sm font-semibold">
+                <div className="detail-approved">
                   ✅ Reply Approved & Sent
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '6px', fontWeight: 400, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <span style={{ fontSize: '13px' }}>ℹ️</span> This is just a demo — real integration coming soon!
+                  </div>
                 </div>
               )}
             </div>

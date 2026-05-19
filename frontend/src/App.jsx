@@ -120,6 +120,38 @@ function App() {
     }
   }
 
+  async function handleRegenerateReply() {
+    if (!selectedComment || processing) return;
+
+    setProcessing(true);
+    try {
+      const response = await api.regenerateReply(selectedComment.id);
+      setAgentResult(response.result);
+
+      // Update comment in list
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === selectedComment.id
+            ? { ...c, status: 'processed', agent_response: response.result }
+            : c
+        )
+      );
+
+      // Refresh analytics
+      const analyticsRes = await api.getAnalytics();
+      setAnalytics(analyticsRes);
+
+      // Refresh follower data
+      const followerRes = await api.getFollower(selectedComment.follower_id);
+      setFollowerData(followerRes);
+    } catch (err) {
+      console.error('Regenerate error:', err);
+      setError(`Failed to regenerate: ${err.message}`);
+    } finally {
+      setProcessing(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -180,6 +212,7 @@ function App() {
                     processing={processing}
                     onProcess={handleProcessComment}
                     onApprove={handleApproveReply}
+                    onRegenerate={handleRegenerateReply}
                   />
                 </div>
 
@@ -214,6 +247,7 @@ function App() {
                   processing={processing}
                   onProcess={handleProcessComment}
                   onApprove={handleApproveReply}
+                  onRegenerate={handleRegenerateReply}
                 />
               </div>
             </div>
